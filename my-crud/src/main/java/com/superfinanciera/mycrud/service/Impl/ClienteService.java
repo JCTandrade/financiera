@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Date;
 import java.util.Objects;
 
@@ -23,10 +25,23 @@ public class ClienteService implements IClienteService {
         ResponseDto responseDto = new ResponseDto();
         responseDto.setError(true);
         responseDto.setStatus(HttpStatus.OK);
+        if (clienteRegistradoDto.getNombreCliente().length() < 2 || clienteRegistradoDto.getApellidoCliente().length() < 2) {
+            responseDto.setError(true);
+            responseDto.setMensaje("Nombre o apellido no cumple con el numero de caracteres especificos");
+            return responseDto;
+        }
         try {
             Clientes validaTipoIdentificacion = this.clientesRepository.findByTipoIdentificacionClienteAndNumeroIndetificacionCliente(clienteRegistradoDto.getTipoIdentificacionCliente(), clienteRegistradoDto.getNumeroIndetificacionCliente());
             if (Objects.isNull(validaTipoIdentificacion)) {
                 validaTipoIdentificacion = this.crearObjetoCliente(clienteRegistradoDto);
+                LocalDate fechaActual = LocalDate.now();
+                Period periodo = Period.between(clienteRegistradoDto.getFechaNacimientoCliente(), fechaActual);
+                int edad = periodo.getYears();
+                if (edad < 18) {
+                    responseDto.setError(true);
+                    responseDto.setMensaje("El cliente debe de ser mayor de edad");
+                    return responseDto;
+                }
                 var data = this.clientesRepository.save(validaTipoIdentificacion);
                 responseDto.setMensaje(data);
                 return responseDto;
@@ -51,5 +66,42 @@ public class ClienteService implements IClienteService {
         validaTipoIdentificacion.setFechaNacimientoCliente(clienteRegistradoDto.getFechaNacimientoCliente());
 
         return validaTipoIdentificacion;
+    }
+
+    @Override
+    public ResponseDto actualizarCliente(ClienteRegistradoDto clienteRegistradoDto) {
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setError(true);
+        responseDto.setStatus(HttpStatus.OK);
+        if (clienteRegistradoDto.getNombreCliente().length() < 2 || clienteRegistradoDto.getApellidoCliente().length() < 2) {
+            responseDto.setError(true);
+            responseDto.setMensaje("Nombre o apellido no cumple con el numero de caracteres especificos");
+            return responseDto;
+        }
+        var cliente = this.clientesRepository.findById(clienteRegistradoDto.getIdCliente());
+        if (cliente.isPresent()) {
+            var actualizarCliente = cliente.get();
+            actualizarCliente = this.crearObjetoCliente((clienteRegistradoDto));
+            actualizarCliente.setIdCliente(clienteRegistradoDto.getIdCliente());
+            actualizarCliente.setUpdatedAt(new Date());
+            this.clientesRepository.save(actualizarCliente);
+            responseDto.setMensaje("Actualizacion realizada de manera correcta");
+            return responseDto;
+        }
+        return this.resgistrarCliente(clienteRegistradoDto);
+    }
+
+    @Override
+    public ResponseDto eliminarCliente(Long id) {
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setError(false);
+        responseDto.setStatus(HttpStatus.OK);
+        try {
+            this.clientesRepository.deleteById(id);
+            responseDto.setMensaje("Cliente eliminado correctamente");
+        }catch (Exception e) {
+            responseDto.setMensaje(e.getMessage());
+        }
+        return responseDto;
     }
 }

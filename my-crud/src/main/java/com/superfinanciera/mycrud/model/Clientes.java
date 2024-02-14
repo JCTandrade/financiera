@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -35,14 +36,14 @@ public class Clientes {
     private String correoCliente;
 
     @Column(name = "fecha_nacimiento")
-    private String fechaNacimientoCliente;
+    private LocalDate fechaNacimientoCliente;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
+    @Column(name = "fecha_actualizacion")
     private Date updatedAt;
 
 }

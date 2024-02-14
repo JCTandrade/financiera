@@ -20,7 +20,19 @@ public class ClientesController {
 
     @PostMapping(path = "registrar-cliente")
     public ResponseEntity<ResponseDto>resgistrarCliente(@Valid @RequestBody ClienteRegistradoDto clienteRegistradoDto) {
-        var servico = this.clienteService.resgistrarCliente(clienteRegistradoDto);
-        return new ResponseEntity<>(servico, servico.getStatus());
+        var servicio = this.clienteService.resgistrarCliente(clienteRegistradoDto);
+        return new ResponseEntity<>(servicio, servicio.getStatus());
+    }
+
+    @PostMapping(path = "actualizar-cliente")
+    public ResponseEntity<ResponseDto>actualizarCliente(@Valid @RequestBody ClienteRegistradoDto clienteRegistradoDto) {
+        var servicio = this.clienteService.actualizarCliente(clienteRegistradoDto);
+        return new ResponseEntity<>(servicio, servicio.getStatus());
+    }
+
+    @GetMapping(path = "eliminar-cliente/{id}")
+    public ResponseEntity<ResponseDto>eliminarCliente(@PathVariable Long id) {
+        var servicio = this.clienteService.eliminarCliente(id);
+        return new ResponseEntity<>(servicio, servicio.getStatus());
     }
 }
