@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -45,5 +46,8 @@ public class Clientes {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_actualizacion")
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "clientes")
+    private List<Cuenta> cuentas;
 
 }
