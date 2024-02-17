@@ -31,20 +31,19 @@ public class MyCrudApplication {
 
 	@PostConstruct
 	public void init() {
-
-		var count = this.tipoCuentaRepository.count();
-		if (count < 0){
 			System.out.println("Se van a crear los registros");
 			TipoCuenta tipoCuenta = new TipoCuenta();
 			tipoCuenta.setId(Constant.ID_CUENTA_AHORRO);
 			tipoCuenta.setTipo(Constant.NOMBRE_CUENTA_AHORRO);
+			tipoCuenta.setIsEliminado("false");
 			tipoCuentaRepository.save(tipoCuenta);
 
 			TipoCuenta tipoCuenta1 = new TipoCuenta();
 			tipoCuenta1.setId(Constant.ID_CUENTA_CORRIENTE);
 			tipoCuenta1.setTipo(Constant.NOMBRE_CUENTA_CORRIENTE);
+			tipoCuenta1.setIsEliminado("false");
 			tipoCuentaRepository.save(tipoCuenta1);
-		}
+
 
 	}
 	@Bean

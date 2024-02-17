@@ -11,6 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tipo_cuenta")
+@NamedQuery(name = "TipoCuenta.findAll", query = "SELECT te FROM TipoCuenta te WHERE te.isEliminado = 'false'")
 public class TipoCuenta {
 
     @Id
@@ -19,4 +20,7 @@ public class TipoCuenta {
 
     @Column(name = "tipo")
     private String tipo;
+
+    @Column(name = "eliminado")
+    private String isEliminado;
 }
