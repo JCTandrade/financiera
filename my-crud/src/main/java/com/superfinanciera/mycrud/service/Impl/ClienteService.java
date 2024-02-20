@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ClienteService implements IClienteService {
@@ -64,7 +65,7 @@ public class ClienteService implements IClienteService {
         validaTipoIdentificacion.setCorreoCliente(clienteRegistradoDto.getCorreoCliente());
         validaTipoIdentificacion.setCreatedAt(new Date());
         validaTipoIdentificacion.setFechaNacimientoCliente(clienteRegistradoDto.getFechaNacimientoCliente());
-
+        validaTipoIdentificacion.setEliminado(false);
         return validaTipoIdentificacion;
     }
 
@@ -101,6 +102,21 @@ public class ClienteService implements IClienteService {
             responseDto.setMensaje("Cliente eliminado correctamente");
         }catch (Exception e) {
             responseDto.setMensaje(e.getMessage());
+        }
+        return responseDto;
+    }
+
+    @Override
+    public ResponseDto buscarClienteId(Long id) {
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setError(false);
+        responseDto.setStatus(HttpStatus.OK);
+        Optional<Clientes> clientes = this.clientesRepository.findById(id);
+        if (clientes.isPresent()) {
+            responseDto.setMensaje(clientes.get());
+        }else {
+            responseDto.setError(true);
+            responseDto.setMensaje("No existe un mensaje con el ID: " + id);
         }
         return responseDto;
     }

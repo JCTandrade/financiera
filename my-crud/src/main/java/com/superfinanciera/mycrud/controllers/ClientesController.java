@@ -30,6 +30,12 @@ public class ClientesController {
         return new ResponseEntity<>(servicio, servicio.getStatus());
     }
 
+    @GetMapping(path = "buscarCliente/{id}")
+    public ResponseEntity<ResponseDto>buscarCliente(@PathVariable Long id) {
+        var servicio = this.clienteService.buscarClienteId(id);
+        return new ResponseEntity<>(servicio, servicio.getStatus());
+    }
+
     @GetMapping(path = "eliminar-cliente/{id}")
     public ResponseEntity<ResponseDto>eliminarCliente(@PathVariable Long id) {
         var servicio = this.clienteService.eliminarCliente(id);

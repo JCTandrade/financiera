@@ -10,4 +10,6 @@ public interface IClienteService {
     ResponseDto actualizarCliente(ClienteRegistradoDto clienteRegistradoDto);
 
     ResponseDto eliminarCliente(Long id);
+
+    ResponseDto buscarClienteId(Long id);
 }

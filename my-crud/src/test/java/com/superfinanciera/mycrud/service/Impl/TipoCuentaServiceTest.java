@@ -31,9 +31,9 @@ class TipoCuentaServiceTest {
     List<TipoCuenta>listaCuentas;
     @BeforeEach
     void setUp() {
-        tipoCuentaUno = new TipoCuenta(1L,"tipo cuenta uno test",false);
-        tipoCuentaDos = new TipoCuenta(2L,"tipo cuenta dos test",true);
-        tipoCuentaTres = new TipoCuenta(3L,"tipo cuenta tres test",false);
+        tipoCuentaUno = new TipoCuenta(1L,"tipo cuenta uno test","false");
+        tipoCuentaDos = new TipoCuenta(2L,"tipo cuenta dos test","true");
+        tipoCuentaTres = new TipoCuenta(3L,"tipo cuenta tres test","false");
 
         listaCuentas = new ArrayList<>();
         listaCuentas.add(tipoCuentaUno);

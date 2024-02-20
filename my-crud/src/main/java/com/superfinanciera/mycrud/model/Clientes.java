@@ -47,7 +47,9 @@ public class Clientes {
     @Column(name = "fecha_actualizacion")
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "clientes")
+    @OneToMany(mappedBy = "clientes", cascade = CascadeType.ALL)
     private List<Cuenta> cuentas;
 
+    @Column(name = "eliminado")
+    private boolean isEliminado;
 }

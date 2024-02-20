@@ -42,6 +42,6 @@ public class Cuenta {
     private Date updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "IdCliente")
+    @JoinColumn(name = "id_cliente")
     private Clientes clientes;
 }
