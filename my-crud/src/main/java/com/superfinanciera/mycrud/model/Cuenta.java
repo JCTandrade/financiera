@@ -1,5 +1,6 @@
 package com.superfinanciera.mycrud.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,8 +25,9 @@ public class Cuenta {
     @Column(name = "numero_cuenta")
     private String numeroCuenta;
 
-    @Column(name = "estado")
-    private String estado;
+    @ManyToOne
+    @JoinColumn(name = "id_estado_cuenta")
+    private EstadoCuenta estadoCuenta;
 
     @Column(name = "saldo")
     private String saldo;
@@ -42,6 +44,7 @@ public class Cuenta {
     private Date updatedAt;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_cliente")
     private Clientes clientes;
 }

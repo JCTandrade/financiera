@@ -7,6 +7,8 @@ import com.superfinanciera.mycrud.model.Cuenta;
 import com.superfinanciera.mycrud.repositories.CuentaRepository;
 import com.superfinanciera.mycrud.service.IClienteService;
 import com.superfinanciera.mycrud.service.ICuentaService;
+import com.superfinanciera.mycrud.service.IEstadoCuentaService;
+import com.superfinanciera.mycrud.utils.Constant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,9 @@ public class CuentaService implements ICuentaService {
     IClienteService clienteService;
 
     @Autowired
+    IEstadoCuentaService estadoCuentaService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
@@ -34,7 +39,6 @@ public class CuentaService implements ICuentaService {
         responseDto.setStatus(HttpStatus.OK);
         try {
             var cliente = clienteService.buscarClienteId(cuentaRegistradaDto.getIdCliente());
-            System.out.println("antes de entrar al if");
             if (cliente.isError()) {
                 responseDto.setMensaje("El cliente con el Id no existe");
             }else {
@@ -47,7 +51,6 @@ public class CuentaService implements ICuentaService {
                     responseDto.setMensaje("La cuenta no se puedo crear correctamente");
                 }
             }
-            System.out.println("despues de salir del if y entra al catch");
         } catch (Exception e) {
             responseDto.setError(true);
             responseDto.setMensaje("Error al registrar la cuenta: " + e.getMessage());
@@ -57,18 +60,19 @@ public class CuentaService implements ICuentaService {
 
     private boolean crearTipoCuenta(CuentaRegistradaDto cuentaRegistradaDto, Clientes clientes) throws Exception {
         boolean isCreada = false;
-        var validarTipoCuenta = new Cuenta();
-        validarTipoCuenta.setTipoCuenta(cuentaRegistradaDto.getTipoCuenta());
-        validarTipoCuenta.setNumeroCuenta(cuentaRegistradaDto.getTipoCuenta() + this.generarNumeroCuenta(cuentaRegistradaDto.getTipoCuenta()));
-        validarTipoCuenta.setEstado(cuentaRegistradaDto.getEstado());
-        validarTipoCuenta.setSaldo(cuentaRegistradaDto.getSaldo());
-        validarTipoCuenta.setExentaGMF(cuentaRegistradaDto.isExentaGMF());
-        validarTipoCuenta.setCreatedAt(new Date());
-        validarTipoCuenta.setClientes(clientes);
-
-        var cuentaCreada = this.cuentaRepository.save(validarTipoCuenta);
-        if (cuentaCreada.getIdCuenta() != null){
-            isCreada = true;
+        if (cuentaRegistradaDto.getSaldo() >= 0) {
+            var validarTipoCuenta = new Cuenta();
+            validarTipoCuenta.setTipoCuenta(cuentaRegistradaDto.getTipoCuenta());
+            validarTipoCuenta.setNumeroCuenta(cuentaRegistradaDto.getTipoCuenta() + this.generarNumeroCuenta(cuentaRegistradaDto.getTipoCuenta()));
+            validarTipoCuenta.setEstadoCuenta(this.estadoCuentaService.buscarPorId(Constant.EstadoCuenta.ID_ACTIVA));
+            validarTipoCuenta.setSaldo(String.valueOf(cuentaRegistradaDto.getSaldo()));
+            validarTipoCuenta.setExentaGMF(cuentaRegistradaDto.isExentaGMF());
+            validarTipoCuenta.setCreatedAt(new Date());
+            validarTipoCuenta.setClientes(clientes);
+            var cuentaCreada = this.cuentaRepository.save(validarTipoCuenta);
+            if (cuentaCreada.getIdCuenta() != null){
+                isCreada = true;
+            }
         }
         return isCreada;
     }

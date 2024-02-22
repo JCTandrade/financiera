@@ -3,7 +3,6 @@ package com.superfinanciera.mycrud.dto;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Data
 public class CuentaRegistradaDto {
@@ -11,11 +10,11 @@ public class CuentaRegistradaDto {
     @NotNull(message = "Debe de selecionar un tipo de cuenta")
     private String tipoCuenta;
 
-    @NotNull(message = "Se debe asignar un estado a la cuenta [Activa, Inactiva, Cancelada]")
+    @NotNull(message = "La cuenta de ahorros debe estar activa")
     private String estado;
 
     @NotNull(message = "Debe ingresar un saldo")
-    private String saldo;
+    private int saldo;
 
     @NotNull(message = "El campo no puede estar vacío")
     private boolean exentaGMF;

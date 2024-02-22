@@ -1,5 +1,6 @@
 package com.superfinanciera.mycrud.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,6 +49,7 @@ public class Clientes {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "clientes", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Cuenta> cuentas;
 
     @Column(name = "eliminado")

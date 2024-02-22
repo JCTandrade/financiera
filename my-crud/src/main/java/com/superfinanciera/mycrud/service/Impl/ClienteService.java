@@ -4,6 +4,7 @@ import com.superfinanciera.mycrud.dto.ClienteRegistradoDto;
 import com.superfinanciera.mycrud.dto.ResponseDto;
 import com.superfinanciera.mycrud.model.Clientes;
 import com.superfinanciera.mycrud.repositories.ClientesRepository;
+import com.superfinanciera.mycrud.repositories.CuentaRepository;
 import com.superfinanciera.mycrud.service.IClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,9 @@ public class ClienteService implements IClienteService {
 
     @Autowired
     ClientesRepository clientesRepository;
+
+    @Autowired
+    CuentaRepository cuentaRepository;
 
     @Override
     public ResponseDto resgistrarCliente(ClienteRegistradoDto clienteRegistradoDto) {
@@ -65,7 +69,7 @@ public class ClienteService implements IClienteService {
         validaTipoIdentificacion.setCorreoCliente(clienteRegistradoDto.getCorreoCliente());
         validaTipoIdentificacion.setCreatedAt(new Date());
         validaTipoIdentificacion.setFechaNacimientoCliente(clienteRegistradoDto.getFechaNacimientoCliente());
-        validaTipoIdentificacion.setEliminado(false);
+        validaTipoIdentificacion.setEliminado(  false);
         return validaTipoIdentificacion;
     }
 
@@ -98,9 +102,16 @@ public class ClienteService implements IClienteService {
         responseDto.setError(false);
         responseDto.setStatus(HttpStatus.OK);
         try {
-            this.clientesRepository.deleteById(id);
-            responseDto.setMensaje("Cliente eliminado correctamente");
-        }catch (Exception e) {
+            boolean tieneProductos = cuentaRepository.existsByClienteId(id);
+            if (tieneProductos) {
+                responseDto.setError(true);
+                responseDto.setStatus(HttpStatus.BAD_REQUEST);
+                responseDto.setMensaje("El cliente no puede ser eliminado porque tiene productos vinculados");
+            } else{
+                clientesRepository.deleteById(id);
+                responseDto.setMensaje("Cliente eliminado correctamente");
+            }
+        } catch (Exception e) {
             responseDto.setMensaje(e.getMessage());
         }
         return responseDto;
@@ -116,7 +127,7 @@ public class ClienteService implements IClienteService {
             responseDto.setMensaje(clientes.get());
         }else {
             responseDto.setError(true);
-            responseDto.setMensaje("No existe un mensaje con el ID: " + id);
+            responseDto.setMensaje("No existe un cliente  con el ID: " + id);
         }
         return responseDto;
     }
