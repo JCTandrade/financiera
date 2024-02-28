@@ -33,7 +33,7 @@ public class Cuenta {
     private String saldo;
 
     @Column(name = "exenta_GMF")
-    private boolean exentaGMF;
+    private String exentaGMF;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion", nullable = false, updatable = false)

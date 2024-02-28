@@ -38,7 +38,7 @@ public class ClienteService implements IClienteService {
         try {
             Clientes validaTipoIdentificacion = this.clientesRepository.findByTipoIdentificacionClienteAndNumeroIndetificacionCliente(clienteRegistradoDto.getTipoIdentificacionCliente(), clienteRegistradoDto.getNumeroIndetificacionCliente());
             if (Objects.isNull(validaTipoIdentificacion)) {
-                validaTipoIdentificacion = this.crearObjetoCliente(clienteRegistradoDto);
+                validaTipoIdentificacion = this.crearObjetoCliente(clienteRegistradoDto, true);
                 LocalDate fechaActual = LocalDate.now();
                 Period periodo = Period.between(clienteRegistradoDto.getFechaNacimientoCliente(), fechaActual);
                 int edad = periodo.getYears();
@@ -60,14 +60,18 @@ public class ClienteService implements IClienteService {
         return responseDto;
     }
 
-    private Clientes crearObjetoCliente(ClienteRegistradoDto clienteRegistradoDto) {
+    private Clientes crearObjetoCliente(ClienteRegistradoDto clienteRegistradoDto, boolean isCreated) {
         var validaTipoIdentificacion = new Clientes();
         validaTipoIdentificacion.setNombreCliente(clienteRegistradoDto.getNombreCliente());
         validaTipoIdentificacion.setApellidoCliente(clienteRegistradoDto.getApellidoCliente());
         validaTipoIdentificacion.setTipoIdentificacionCliente(clienteRegistradoDto.getTipoIdentificacionCliente());
         validaTipoIdentificacion.setNumeroIndetificacionCliente(clienteRegistradoDto.getNumeroIndetificacionCliente());
         validaTipoIdentificacion.setCorreoCliente(clienteRegistradoDto.getCorreoCliente());
-        validaTipoIdentificacion.setCreatedAt(new Date());
+        if (isCreated) {
+            validaTipoIdentificacion.setCreatedAt(new Date());
+        } else {
+            validaTipoIdentificacion.setUpdatedAt(new Date());
+        }
         validaTipoIdentificacion.setFechaNacimientoCliente(clienteRegistradoDto.getFechaNacimientoCliente());
         validaTipoIdentificacion.setEliminado(  false);
         return validaTipoIdentificacion;
@@ -86,9 +90,8 @@ public class ClienteService implements IClienteService {
         var cliente = this.clientesRepository.findById(clienteRegistradoDto.getIdCliente());
         if (cliente.isPresent()) {
             var actualizarCliente = cliente.get();
-            actualizarCliente = this.crearObjetoCliente((clienteRegistradoDto));
+            actualizarCliente = this.crearObjetoCliente(clienteRegistradoDto, false);
             actualizarCliente.setIdCliente(clienteRegistradoDto.getIdCliente());
-            actualizarCliente.setUpdatedAt(new Date());
             this.clientesRepository.save(actualizarCliente);
             responseDto.setMensaje("Actualizacion realizada de manera correcta");
             return responseDto;

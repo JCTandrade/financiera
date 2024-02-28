@@ -6,21 +6,12 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class CuentaRegistradaDto {
+public class EstadoCuentaDto {
     private Long idCuenta;
-
-    @NotNull(message = "Debe de selecionar un tipo de cuenta")
-    private String tipoCuenta;
 
     @NotNull(message = "El estado de la cuenta no puede ser nulo")
     private Long estadoCuenta;
 
-    @NotNull(message = "La cuenta de ahorros debe estar activa")
-    private String estado;
-
     @NotNull(message = "El campo no puede estar vacío")
     private String exentaGMF;
-
-    @NotNull(message = "El campo de Id del cliente no puede quedar vacio")
-    private Long idCliente;
 }
