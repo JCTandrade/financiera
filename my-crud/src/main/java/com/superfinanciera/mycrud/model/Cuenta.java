@@ -30,7 +30,7 @@ public class Cuenta {
     private EstadoCuenta estadoCuenta;
 
     @Column(name = "saldo")
-    private String saldo;
+    private Double saldo;
 
     @Column(name = "exenta_GMF")
     private String exentaGMF;

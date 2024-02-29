@@ -15,12 +15,21 @@ public class Constant {
     public static final String NOMBRE_CUENTA_CORRIENTE = "cuenta corriente";
 
     public class EstadoCuenta {
-        public static final Long ID_ACTIVA= 1L;
+        public static final Long ID_ACTIVA = 1L;
         public static final String ESTADO_CUENTA_ACTIVA = "Activa";
         public static final Long ID_INACTIVA = 2L;
         public static final String ESTADO_CUENTA_INACTIVA = "Inactiva";
         public static final Long ID_CANCELADA = 3L;
         public static final String ESTADO_CUENTA_CANCELADA = "Cancelada";
 
+    }
+
+    public class Transaccion{
+        public static final Long ID_CONSIGNACION = 1L;
+        public static final String TIPO_CONSIGNACION = "consignacion";
+        public static final Long ID_RETIRO = 2L;
+        public static final String TIPO_RETIRO = "retiro";
+        public static final Long ID_TRANSFERENCIA = 3L;
+        public static final String TIPO_TRANSFERENCIA = "transferencia";
     }
 }

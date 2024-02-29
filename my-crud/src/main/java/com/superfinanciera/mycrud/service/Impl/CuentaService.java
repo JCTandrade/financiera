@@ -68,7 +68,7 @@ public class CuentaService implements ICuentaService {
         validarTipoCuenta.setTipoCuenta(cuentaRegistradaDto.getTipoCuenta());
         validarTipoCuenta.setNumeroCuenta(cuentaRegistradaDto.getTipoCuenta() + this.generarNumeroCuenta(cuentaRegistradaDto.getTipoCuenta()));
         validarTipoCuenta.setEstadoCuenta(this.estadoCuentaService.buscarPorId(Constant.EstadoCuenta.ID_ACTIVA));
-        validarTipoCuenta.setSaldo("0");
+        validarTipoCuenta.setSaldo(0.0);
         validarTipoCuenta.setExentaGMF(cuentaRegistradaDto.getExentaGMF());
         validarTipoCuenta.setCreatedAt(new Date());
         validarTipoCuenta.setClientes(clientes);

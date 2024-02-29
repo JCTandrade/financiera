@@ -2,8 +2,10 @@ package com.superfinanciera.mycrud;
 
 import com.superfinanciera.mycrud.model.EstadoCuenta;
 import com.superfinanciera.mycrud.model.TipoCuenta;
+import com.superfinanciera.mycrud.model.TipoTransaccion;
 import com.superfinanciera.mycrud.repositories.EstadoCuentaRepository;
 import com.superfinanciera.mycrud.repositories.TipoCuentaRepository;
+import com.superfinanciera.mycrud.repositories.TipoTransaccionRespository;
 import com.superfinanciera.mycrud.utils.Constant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class MyCrudApplication {
 	@Autowired
 	private EstadoCuentaRepository estadoCuentaRepository;
 
+	@Autowired
+	private TipoTransaccionRespository tipoTransaccionRespository;
+
 	@PostConstruct
 	public void init() {
 			System.out.println("Se van a crear los registros");
@@ -50,7 +55,7 @@ public class MyCrudApplication {
 			tipoCuentaRepository.save(tipoCuenta1);
 
 			this.guardarEstadoCuenta();
-
+			this.iniciar();
 	}
 	public void guardarEstadoCuenta(){
 		System.out.println("Se van a crear los registros de los estados de cuenta");
@@ -69,6 +74,25 @@ public class MyCrudApplication {
 		estadoCuenta2.setNombre(Constant.EstadoCuenta.ESTADO_CUENTA_CANCELADA);
 		estadoCuentaRepository.save(estadoCuenta2);
 	}
+
+	public void iniciar(){
+		System.out.println("Se  van a crear los registros de las transacciones");
+		TipoTransaccion tipoTransaccion = new TipoTransaccion();
+		tipoTransaccion.setId(Constant.Transaccion.ID_CONSIGNACION);
+		tipoTransaccion.setTipo(Constant.Transaccion.TIPO_CONSIGNACION);
+		tipoTransaccionRespository.save(tipoTransaccion);
+
+		TipoTransaccion tipoTransaccion1 = new TipoTransaccion();
+		tipoTransaccion1.setId(Constant.Transaccion.ID_RETIRO);
+		tipoTransaccion1.setTipo(Constant.Transaccion.TIPO_RETIRO);
+		tipoTransaccionRespository.save(tipoTransaccion1);
+
+		TipoTransaccion tipoTransaccion2 = new TipoTransaccion();
+		tipoTransaccion2.setId(Constant.Transaccion.ID_TRANSFERENCIA);
+		tipoTransaccion2.setTipo(Constant.Transaccion.TIPO_TRANSFERENCIA);
+		tipoTransaccionRespository.save(tipoTransaccion2);
+	}
+
 	@Bean
 	public Validator validator() {
 		return new LocalValidatorFactoryBean();
