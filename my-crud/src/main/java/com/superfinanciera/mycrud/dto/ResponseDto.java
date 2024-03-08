@@ -1,5 +1,6 @@
 package com.superfinanciera.mycrud.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 

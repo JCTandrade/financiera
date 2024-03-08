@@ -45,11 +45,14 @@ public class TransaccionService implements ITransaccionService {
             var cuenta = cuentaService.buscarCuentaId(transaccionDto.getCuentaOrigen());
             var tipoTransferencia = tipoTransaccionService.buscarPorId(idTipoTransaccion);
             var cuentaOrigen = modelMapper.map(cuenta.getMensaje(), Cuenta.class);
-            if (tipoTransferencia.getId().equals(Constant.Transaccion.TIPO_TRANSFERENCIA)) {
+            var cuentaDestino = cuentaService.buscarCuentaId(transaccionDto.getCuentaDestino());
+            if (cuentaDestino == null) {
+                throw new Exception("Para realizar una transferencia debe ingresar el Id de la cuenta destino");
+            }
+            if (tipoTransferencia.getId().equals(Constant.Transaccion.ID_TRANSFERENCIA)) {
                 if (transaccionDto.getCuentaDestino() == null) {
                     throw new Exception("Para realizar una transferencia se debe de ingresar una cuenta destino");
                 }
-                var cuentaDestino = cuentaService.buscarCuentaId(transaccionDto.getCuentaDestino());
                 this.transferencia(modelMapper.map(cuentaDestino.getMensaje(), Cuenta.class), cuentaOrigen, transaccionDto.getMonto());
             } else {
                 this.validarTipoTransaccion(tipoTransferencia, cuentaOrigen, transaccionDto.getMonto());
@@ -100,14 +103,18 @@ public class TransaccionService implements ITransaccionService {
     }
 
     public void transferencia(Cuenta cuentaDestino, Cuenta cuentaOrigen, Double monto) throws Exception {
-        if (cuentaOrigen.getSaldo() < monto) {
-            throw new Exception("Fondos insuficientes para la transaccion");
+        try {
+            if (cuentaOrigen.getSaldo() < monto) {
+                throw new Exception("Fondos insuficientes para la transaccion");
+            }
+            cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - monto);
+            cuentaOrigen.setUpdatedAt(new Date());
+            cuentaRepository.save(cuentaOrigen);
+            cuentaDestino.setSaldo(cuentaDestino.getSaldo() + monto);
+            cuentaDestino.setUpdatedAt(new Date());
+            cuentaRepository.save(cuentaDestino);
+        } catch (Exception e) {
+            throw new Exception("Error al realizar la transferencia: " + e.getMessage());
         }
-        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - monto);
-        cuentaOrigen.setUpdatedAt(new Date());
-        cuentaRepository.save(cuentaOrigen);
-        cuentaDestino.setSaldo(cuentaDestino.getSaldo() + monto);
-        cuentaDestino.setUpdatedAt(new Date());
-        cuentaRepository.save(cuentaDestino);
     }
 }
