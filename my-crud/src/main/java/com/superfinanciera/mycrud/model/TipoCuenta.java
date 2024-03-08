@@ -15,6 +15,7 @@ import javax.persistence.*;
 public class TipoCuenta {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 

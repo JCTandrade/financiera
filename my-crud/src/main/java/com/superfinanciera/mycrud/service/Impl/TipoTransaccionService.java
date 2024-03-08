@@ -29,4 +29,13 @@ public class TipoTransaccionService implements ITipoTransaccionService {
         }
         return responseDto;
     }
+
+    @Override
+    public TipoTransaccion buscarPorId(Long id) throws Exception {
+        var tipoTransaccion = tipoTransaccionRespository.findById(id);
+        if (tipoTransaccion.isPresent()) {
+            return tipoTransaccion.get();
+        }
+        throw new Exception("El id del tipo transaccion no existe");
+    }
 }

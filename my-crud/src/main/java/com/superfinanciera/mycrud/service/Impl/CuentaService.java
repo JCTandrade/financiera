@@ -121,21 +121,20 @@ public class CuentaService implements ICuentaService {
     private Cuenta validarEstado(Cuenta cuenta, EstadoCuenta estadoCuenta, EstadoCuentaDto estadoCuentaDto) throws Exception {
         var saldo = cuenta.getSaldo();
         var estado = estadoCuenta.getNombre();
-        if (cuenta.getEstadoCuenta().getNombre().equals(Constant.EstadoCuenta.ESTADO_CUENTA_CANCELADA)) {
-            throw new Exception("La cuenta no se puede activar o inactivar porque está cancelada");
-        }
         if (estado.equals(Constant.EstadoCuenta.ESTADO_CUENTA_ACTIVA) &&
                 cuenta.getEstadoCuenta().getNombre().equals(Constant.EstadoCuenta.ESTADO_CUENTA_INACTIVA)) {
-                cuenta.setExentaGMF(estadoCuentaDto.getExentaGMF());
-                cuenta.setUpdatedAt(new Date());
-                cuenta.setEstadoCuenta(estadoCuenta);
-                cuenta.setExentaGMF(estadoCuentaDto.getExentaGMF());
+            cuenta.setExentaGMF(estadoCuentaDto.getExentaGMF());
+            cuenta.setUpdatedAt(new Date());
+            cuenta.setEstadoCuenta(estadoCuenta);
         } else if (estado.equals(Constant.EstadoCuenta.ESTADO_CUENTA_INACTIVA) ||
-                estado.equals(Constant.EstadoCuenta.ESTADO_CUENTA_CANCELADA) && saldo.equals("0")) {
-                cuenta.setExentaGMF(estadoCuentaDto.getExentaGMF());
-                cuenta.setUpdatedAt(new Date());
-                cuenta.setEstadoCuenta(estadoCuenta);
-
+                estado.equals(Constant.EstadoCuenta.ESTADO_CUENTA_CANCELADA) && saldo.equals(0.0)) {
+            cuenta.setExentaGMF(estadoCuentaDto.getExentaGMF());
+            cuenta.setUpdatedAt(new Date());
+            cuenta.setEstadoCuenta(estadoCuenta);
+        } else if (estado.equals(Constant.EstadoCuenta.ESTADO_CUENTA_ACTIVA)) {
+            cuenta.setExentaGMF(estadoCuentaDto.getExentaGMF());
+            cuenta.setUpdatedAt(new Date());
+            cuenta.setEstadoCuenta(estadoCuenta);
         }
         return this.cuentaRepository.save(cuenta);
     }
