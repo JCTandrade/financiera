@@ -5,7 +5,6 @@ import com.superfinanciera.mycrud.repositories.TipoCuentaRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -14,8 +13,6 @@ import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class TipoCuentaServiceTest {
@@ -48,6 +45,15 @@ class TipoCuentaServiceTest {
 
         Assertions.assertNotNull(service);
         Assertions.assertEquals(HttpStatus.OK,service.getStatus());
+    }
+
+    @Test
+    void testIsError() {
+        Mockito.when(tipoCuentaRepository.findAll()).thenReturn(new ArrayList<>());
+        var service = tipoCuentaService.obtenerListaTipoCuenta();
+
+        Assertions.assertNotNull(service);
+        Assertions.assertEquals("No existen tipos cuentas disponibles",service.getMensaje());
     }
 
 }
