@@ -43,19 +43,20 @@ public class TransaccionService implements ITransaccionService {
         try {
             var idTipoTransaccion = transaccionDto.getTipoTransaccion();
             var cuenta = cuentaService.buscarCuentaId(transaccionDto.getCuentaOrigen());
-            var tipoTransferencia = tipoTransaccionService.buscarPorId(idTipoTransaccion);
+            var tipoTransaccion = tipoTransaccionService.buscarPorId(idTipoTransaccion);
             var cuentaOrigen = modelMapper.map(cuenta.getMensaje(), Cuenta.class);
             var cuentaDestino = cuentaService.buscarCuentaId(transaccionDto.getCuentaDestino());
             if (cuentaDestino == null) {
                 throw new Exception("Para realizar una transferencia debe ingresar el Id de la cuenta destino");
             }
-            if (tipoTransferencia.getId().equals(Constant.Transaccion.ID_TRANSFERENCIA)) {
+            if (tipoTransaccion.getId().equals(Constant.Transaccion.ID_TRANSFERENCIA)) {
                 if (transaccionDto.getCuentaDestino() == null) {
                     throw new Exception("Para realizar una transferencia se debe de ingresar una cuenta destino");
                 }
                 this.transferencia(modelMapper.map(cuentaDestino.getMensaje(), Cuenta.class), cuentaOrigen, transaccionDto.getMonto());
+                responseDto.setMensaje("Se realizo la transferencia de manera correcta");
             } else {
-                this.validarTipoTransaccion(tipoTransferencia, cuentaOrigen, transaccionDto.getMonto());
+                this.validarTipoTransaccion(tipoTransaccion, cuentaOrigen, transaccionDto.getMonto());
             }
             if (cuenta.isError()) {
                 responseDto.setMensaje("La cuenta con el Id no existe");
