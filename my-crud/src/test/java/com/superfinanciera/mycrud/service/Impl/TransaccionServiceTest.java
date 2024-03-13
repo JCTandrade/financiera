@@ -106,6 +106,40 @@ public class TransaccionServiceTest {
     }
 
     @Test
+    void testValidarTipoTransaccionError() throws Exception {
+        transaccionDto.setTipoTransaccion(2L);
+        tipoTransaccion.setTipo(Constant.Transaccion.TIPO_RETIRO);
+        transaccionDto.setMonto(-200.0);
+        transaccionDto.setCuentaOrigen(1L);
+        cuentaOrigen.setSaldo(10.0);
+        Mockito.when(cuentaService.buscarCuentaId(Mockito.any())).thenReturn(responseDto);
+        Mockito.when(tipoTransaccionService.buscarPorId(Mockito.any())).thenReturn(tipoTransaccion);
+        Mockito.when(modelMapper.map(Mockito.any(), Mockito.eq(Cuenta.class))).thenReturn(cuentaOrigen);
+        Mockito.when(cuentaService.buscarCuentaId(transaccionDto.getCuentaDestino())).thenReturn(responseDto);
+        var servicio = transaccionService.realizarTansaccion(transaccionDto);
+
+        Assertions.assertNotNull(servicio);
+        Assertions.assertEquals("Error al realizar la transaccion: El monto de debe ser positivo", servicio.getMensaje());
+    }
+
+    @Test
+    void testValidarTipoTransaccionSeleccionIncorrecta() throws Exception {
+        tipoTransaccion.setId(4L);
+        tipoTransaccion.setTipo("tipo-desconocido");
+        transaccionDto.setMonto(200.0);
+        transaccionDto.setCuentaOrigen(1L);
+        cuentaOrigen.setSaldo(10.0);
+        Mockito.when(cuentaService.buscarCuentaId(Mockito.any())).thenReturn(responseDto);
+        Mockito.when(tipoTransaccionService.buscarPorId(Mockito.any())).thenReturn(tipoTransaccion);
+        Mockito.when(modelMapper.map(Mockito.any(), Mockito.eq(Cuenta.class))).thenReturn(cuentaOrigen);
+        Mockito.when(cuentaService.buscarCuentaId(transaccionDto.getCuentaDestino())).thenReturn(responseDto);
+        var servicio = transaccionService.realizarTansaccion(transaccionDto);
+
+        Assertions.assertNotNull(servicio);
+        Assertions.assertEquals(HttpStatus.OK,servicio.getStatus());
+    }
+
+    @Test
     void testRealizarTransaccionCuentaDesstinoNull() throws Exception {
         Mockito.when(cuentaService.buscarCuentaId(Mockito.any())).thenReturn(responseDto);
         Mockito.when(tipoTransaccionService.buscarPorId(Mockito.any())).thenReturn(tipoTransaccion);
@@ -171,7 +205,4 @@ public class TransaccionServiceTest {
         Assertions.assertNotNull(servicio);
         Assertions.assertEquals("Error al realizar la transaccion: Error al realizar la transferencia: Fondos insuficientes para la transaccion",servicio.getMensaje());
     }
-
-    //FALTA HACER PARA VALIDAR TIPO TRANSACCION CUANDO EL MONTO ES NEGATIVO Y CUANDO SE INGRESA
-    //SE SELECCIONA UNA OPCION MAL PARA EL TIPO DE TRANSACCION
 }
