@@ -130,7 +130,7 @@ public class ClienteService implements IClienteService {
             responseDto.setMensaje(clientes.get());
         }else {
             responseDto.setError(true);
-            responseDto.setMensaje("No existe un cliente  con el ID: " + id);
+            responseDto.setMensaje("No existe un cliente con el ID: " + id);
         }
         return responseDto;
     }

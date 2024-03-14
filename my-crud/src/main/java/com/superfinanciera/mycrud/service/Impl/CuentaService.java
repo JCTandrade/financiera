@@ -121,8 +121,9 @@ public class CuentaService implements ICuentaService {
     private Cuenta validarEstado(Cuenta cuenta, EstadoCuenta estadoCuenta, EstadoCuentaDto estadoCuentaDto) throws Exception {
         var saldo = cuenta.getSaldo();
         var estado = estadoCuenta.getNombre();
+        var estadoCuentaOrigen = cuenta.getEstadoCuenta().getNombre();
         if (estado.equals(Constant.EstadoCuenta.ESTADO_CUENTA_ACTIVA) &&
-                cuenta.getEstadoCuenta().getNombre().equals(Constant.EstadoCuenta.ESTADO_CUENTA_INACTIVA)) {
+                estadoCuentaOrigen.equals(Constant.EstadoCuenta.ESTADO_CUENTA_INACTIVA)) {
             cuenta.setExentaGMF(estadoCuentaDto.getExentaGMF());
             cuenta.setUpdatedAt(new Date());
             cuenta.setEstadoCuenta(estadoCuenta);
