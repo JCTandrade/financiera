@@ -4,12 +4,13 @@ import com.superfinanciera.mycrud.dto.CuentaRegistradaDto;
 import com.superfinanciera.mycrud.dto.EstadoCuentaDto;
 import com.superfinanciera.mycrud.dto.ResponseDto;
 import com.superfinanciera.mycrud.service.ICuentaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+
 
 @RestController
 @CrossOrigin(origins = "*")

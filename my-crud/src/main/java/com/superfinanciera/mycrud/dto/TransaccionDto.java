@@ -1,10 +1,8 @@
 package com.superfinanciera.mycrud.dto;
 
-import com.superfinanciera.mycrud.model.TipoTransaccion;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Data
 public class TransaccionDto {

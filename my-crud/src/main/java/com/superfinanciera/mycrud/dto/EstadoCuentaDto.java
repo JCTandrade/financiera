@@ -1,9 +1,8 @@
 package com.superfinanciera.mycrud.dto;
 
-import com.superfinanciera.mycrud.model.EstadoCuenta;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 
 @Data
 public class EstadoCuentaDto {

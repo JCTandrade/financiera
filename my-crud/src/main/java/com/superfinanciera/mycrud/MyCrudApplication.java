@@ -7,21 +7,15 @@ import com.superfinanciera.mycrud.repositories.EstadoCuentaRepository;
 import com.superfinanciera.mycrud.repositories.TipoCuentaRepository;
 import com.superfinanciera.mycrud.repositories.TipoTransaccionRespository;
 import com.superfinanciera.mycrud.utils.Constant;
+import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import javax.annotation.PostConstruct;
-import javax.validation.Validator;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class MyCrudApplication {

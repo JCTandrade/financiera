@@ -44,8 +44,21 @@ public class ClienteServiceTest {
     }
 
     @Test
-    void testRegistrarClientePrimerIf() {
+    void testRegistrarClientePrimerIfNombre() {
         clienteRegistradoDto.setNombreCliente("J");
+        clienteRegistradoDto.setApellidoCliente("Tovar");
+
+        responseDto.setError(false);
+
+        Mockito.when(clientesRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        var servicio =clienteService.resgistrarCliente(clienteRegistradoDto);
+        Assertions.assertNotNull(servicio);
+        Assertions.assertEquals("Nombre o apellido no cumple con el numero de caracteres especificos",servicio.getMensaje());
+    }
+    @Test
+    void testRegistrarClientePrimerIfApellido() {
+        clienteRegistradoDto.setNombreCliente("Juan");
         clienteRegistradoDto.setApellidoCliente("T");
 
         responseDto.setError(false);
@@ -110,8 +123,19 @@ public class ClienteServiceTest {
     }
 
     @Test
-    void testActualizarClientePrimerIf() {
+    void testActualizarClientePrimerIfNombre() {
         clienteRegistradoDto.setNombreCliente("A");
+        clienteRegistradoDto.setApellidoCliente("Diaz");
+        responseDto.setError(false);
+
+        var servicio =clienteService.actualizarCliente(clienteRegistradoDto);
+        Assertions.assertNotNull(servicio);
+        Assertions.assertEquals("Nombre o apellido no cumple con el numero de caracteres especificos",servicio.getMensaje());
+    }
+
+    @Test
+    void testActualizarClientePrimerIfApellido() {
+        clienteRegistradoDto.setNombreCliente("Andres");
         clienteRegistradoDto.setApellidoCliente("D");
         responseDto.setError(false);
 

@@ -99,6 +99,21 @@ class ClientesControllerTest {
     }
 
     @Test
+    void testBuscarClientePorIdNull() {
+        clienteRegistradoDto.setIdCliente(null);
+
+        responseDto.setStatus(HttpStatus.OK);
+        responseDto.setMensaje("ID no ingresado");
+
+        Mockito.when(clienteService.buscarClienteId(null)).thenReturn(responseDto);
+
+        ResponseEntity<ResponseDto> responseEntity = clientesController.buscarCliente(null);
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        Assertions.assertEquals("ID no ingresado", responseEntity.getBody().getMensaje());
+    }
+
+    @Test
     void testEliminarClienteOk() {
         clienteRegistradoDto.setIdCliente(2L);
 

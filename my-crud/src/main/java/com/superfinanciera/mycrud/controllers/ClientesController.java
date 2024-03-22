@@ -3,12 +3,13 @@ package com.superfinanciera.mycrud.controllers;
 import com.superfinanciera.mycrud.dto.ClienteRegistradoDto;
 import com.superfinanciera.mycrud.dto.ResponseDto;
 import com.superfinanciera.mycrud.service.IClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -19,7 +20,7 @@ public class ClientesController {
     IClienteService clienteService;
 
     @PostMapping(path = "registrar-cliente")
-    public ResponseEntity<ResponseDto>resgistrarCliente(@Valid @RequestBody ClienteRegistradoDto clienteRegistradoDto) {
+    public ResponseEntity<ResponseDto>resgistrarCliente(@Valid  @RequestBody ClienteRegistradoDto clienteRegistradoDto) {
         var servicio = this.clienteService.resgistrarCliente(clienteRegistradoDto);
         return new ResponseEntity<>(servicio, servicio.getStatus());
     }
@@ -30,8 +31,15 @@ public class ClientesController {
         return new ResponseEntity<>(servicio, servicio.getStatus());
     }
 
-    @GetMapping(path = "buscarCliente/{id}")
-    public ResponseEntity<ResponseDto>buscarCliente(@PathVariable Long id) {
+    @GetMapping(path = {"buscarCliente","buscarCliente/{id}"})
+    public ResponseEntity<ResponseDto>buscarCliente(@PathVariable(required = false) Long id) {
+        ResponseDto responseDto = new ResponseDto();
+        if (id == null) {
+            responseDto.setMensaje("ID no ingresado");
+            responseDto.setError(true);
+            responseDto.setStatus(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+        }
         var servicio = this.clienteService.buscarClienteId(id);
         return new ResponseEntity<>(servicio, servicio.getStatus());
     }
